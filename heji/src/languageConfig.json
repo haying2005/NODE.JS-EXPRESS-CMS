@@ -1,0 +1,17 @@
+[
+    {
+        "key": "zh-CN",
+        "localString": "中文(简体)",
+        "CN_String": "中文(简体)"
+    },
+    {
+        "key": "en-US",
+        "localString": "English",
+        "CN_String": "英语(美国)"
+    },
+    {
+        "key": "ru",
+        "localString": "русский",
+        "CN_String": "俄语"
+    }
+]
