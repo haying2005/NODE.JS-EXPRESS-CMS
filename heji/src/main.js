@@ -30,15 +30,16 @@ router.afterEach((to, from) => {
   console.log(router);
 });
 
-let host = '';
-if (process.env.NODE_ENV == 'production') {
-  host = '';
-  console.log('生产环境');
-}
-else {
-  host = 'http://localhost:3000';
-  console.log('开发环境.');
-}
+let host = __HTTP_PREFIX__;
+console.log('http prefix:', host);
+// if (process.env.NODE_ENV == 'production') {
+//   host = '';
+//   console.log('生产环境');
+// }
+// else {
+//   host = 'http://localhost:3000';
+//   console.log('开发环境.');
+// }
 Vue.http.interceptors.push((request, next) => {
   request.credentials = true; //cookie
   request.url = host + request.url;
@@ -52,8 +53,6 @@ Vue.http.interceptors.push((request, next) => {
     }
   });
 });
-
-Vue.http.ins
 
 
 new Vue({

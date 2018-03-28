@@ -4,6 +4,12 @@
             <el-form-item label="标题">
                 <el-input v-model="form.title"></el-input>
             </el-form-item>
+            
+            <el-form-item label="日期">
+                <el-date-picker v-model="form.createTime" type="date" placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+
             <el-form-item label="作者">
                 <el-input v-model="form.author"></el-input>
             </el-form-item>
@@ -24,7 +30,7 @@
             </el-form>
 
             <el-form-item label="缩略图">
-                <el-upload ref="upload" :action="uploadUrl" :data="uploadData" :before-upload="onBeforeUpload" :on-success="uploadSuccHandle"
+                <el-upload :key="'thumbnails'" ref="upload" :action="uploadUrl" :data="uploadData" :before-upload="onBeforeUpload" :on-success="uploadSuccHandle"
                     :on-remove="onRemoveHandle" list-type="picture-card">
                     <i class="el-icon-plus"></i>
                 </el-upload>
@@ -43,7 +49,7 @@
             </el-form>
 
             <el-form-item label="标签">
-                <el-tag style="margin-right:10px" :key="tag" v-for="tag in dynamicTags" :closable="true" :close-transition="true" @close="handleClose(tag)">
+                <el-tag style="margin-right:10px" v-for="tag in dynamicTags" :key="tag" :closable="true" :close-transition="true" @close="handleClose(tag)">
                     {{tag}}
                 </el-tag>
                 <el-input style="width: 70px" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="mini" @keyup.enter.native="handleInputConfirm"
@@ -65,7 +71,7 @@
         </el-form>
 
         <el-dialog title="图片上传" :visible.sync="isDialogShow">
-            <pic-uploader @save="onInsertPicHandle"></pic-uploader>
+            <pic-uploader :key="'pic-uploader'" @save="onInsertPicHandle"></pic-uploader>
         </el-dialog>
     </div>
 </template>
@@ -115,6 +121,8 @@
                     lang: this.$bus.langs[0].key,
 
                     tags: '',
+
+                    createTime: new Date(),
                 },
 
             }
@@ -320,6 +328,7 @@
                             this.form.priority = post.priority;
                             this.form.lang = post.lang;
                             this.form.tags = post.tags;
+                            this.form.createTime = post.createTime;
 
                             //类目
                             //console.log('-------------------->' + post.category);
