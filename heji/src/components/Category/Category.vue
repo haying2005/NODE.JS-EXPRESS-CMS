@@ -13,7 +13,6 @@
             <el-dialog :title="dialogTitle" :visible.sync="isDialogShow">
                 <add-category :handleType="currentHandle" :father="currentClick" ref="addCategory" @save="handleSave()"></add-category>
             </el-dialog>
-
         </div>
     </div>
 

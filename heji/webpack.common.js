@@ -32,9 +32,10 @@ module.exports = {
       minChunks: 2,
     }),
 
-    // new CopyWebpackPlugin([{
-    //   from: __dirname + '/static'
-    // }])
+    new CopyWebpackPlugin([{
+      from: __dirname + '/static',
+      to: __dirname + '/dist/static',
+    }])
 
   ],
   module: {

@@ -7,9 +7,9 @@
             <el-menu-item index="1">处理中心</el-menu-item>
             <el-submenu index="2">
               <template slot="title">我的工作台</template>
-              <el-menu-item index="2-1">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
-              <el-menu-item index="2-3">选项3</el-menu-item>
+              <el-menu-item index="2-1" @click="isModifyPassShow=true">修改密码</el-menu-item>
+              <el-menu-item index="2-2" @click="isModifyNickShow=true">修改昵称</el-menu-item>
+              <el-menu-item index="2-3" @click="logOut">退出登录</el-menu-item>
             </el-submenu>
             <el-menu-item index="3">登录</el-menu-item>
           </el-menu>
@@ -42,12 +42,24 @@
     <div id="login" v-if="!isLogin">
       <login ref="login"></login>
     </div>
+    <!-- 对话框 -->
+    <div>
+      <el-dialog :title="'修改密码'" :visible.sync="isModifyPassShow">
+        <modify-pass ref="modifyPassDlg" @save="passSave()"></modify-pass>
+      </el-dialog>
+      <el-dialog :title="'修改密码'" :visible.sync="isModifyNickShow">
+        <modify-nick ref="modifyNickDlg" @save="nickSave()"></modify-nick>
+      </el-dialog>
+    </div>
   </div>
+
 </template>
 
 <script>
   import leftNav from './components/LeftNav.vue';
-  import login from './Login.vue'
+  import login from './Login.vue';
+  import ModifyPassDia from './components/Settings/modifyPassDlg.vue';
+  import ModifyNickDia from './components/Settings/modifyNickDlg.vue';
   export default {
     name: 'app',
     created() {
@@ -66,10 +78,35 @@
         isLogin: true,
         routeName: this.$route.name,
         bus: this.$bus,
+        isModifyPassShow: false,
+        isModifyNickShow: false,
       }
     },
     methods: {
-
+      passSave() {
+        this.isModifyPassShow = false;
+        console.log('password modified!');
+      },
+      nickSave() {
+        this.isModifyNickShow = false;
+        console.log('nick saved');
+      },
+      logOut() {
+        this.$confirm('确定退出登录?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .catch(err => {
+            throw new Error('操作取消.')    //catch方法必须抛出错误，否则后面的then会执行.
+          })
+          .then(o => this.$http.post('/users/logout'))
+          .then(ids => {
+            this.$bus.$emit('logout');
+            this.$message.success('退出登录成功.')
+          })
+          .catch(err => this.$message.error(err.message))
+      }
     },
     computed: {
       pathsArr: function () {
@@ -94,12 +131,13 @@
     components: {
       leftNav: leftNav,
       login: login,
+      modifyPass: ModifyPassDia,
+      modifyNick: ModifyNickDia,
     },
     watch: {
       '$route': function () {
         //console.log(this.$route.name);
         this.routeName = this.$route.name;
-
       }
     }
   }

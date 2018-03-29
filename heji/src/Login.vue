@@ -38,6 +38,7 @@
                         this.$message.success('登录成功');
 
                         this.$bus.$emit('login', obj.data);
+                        this.$bus.user = obj.data;
                         this.$bus.fetchAllCategorys();
                     }
                     else {
